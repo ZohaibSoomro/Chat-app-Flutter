@@ -2,6 +2,9 @@ import 'package:chat_app/constants.dart';
 import 'package:chat_app/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
+import '../utilities/widgets/roundedbtn.dart';
+import 'signup_page.dart';
+
 class LoginSignupOption extends StatelessWidget {
   const LoginSignupOption({super.key});
 
@@ -29,75 +32,34 @@ class LoginSignupOption extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Sign in button
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      gradient: const LinearGradient(
-                        colors: [kButtonUpperColor, kButtonLowerColor],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                    ),
-                    child: MaterialButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginPage(),
-                          ),
-                        );
-                      },
-                      minWidth: 200,
-                      height: 50,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.mail_outline,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Sign In with Email',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
+                  RoundedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ),
+                      );
+                    },
+                    text: 'Sign In with Email',
+                    icon: Icons.mail_outline,
                   ),
                   const SizedBox(height: 20),
-                  // Sign up button
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: kButtonLowerColor, width: 2),
-                    ),
-                    child: MaterialButton(
-                      onPressed: () {},
-                      minWidth: 200,
-                      height: 50,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.app_registration_outlined,
-                            color: kIconColor,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Sign Up',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
+                  RoundedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignupPage(),
+                        ),
+                      );
+                    },
+                    text: 'Sign up',
+                    icon: Icons.app_registration_rounded,
+                    colored: false,
                   ),
+                  // Sign up button
+
                   const SizedBox(height: 20),
                   // Forgot password button
                   Align(

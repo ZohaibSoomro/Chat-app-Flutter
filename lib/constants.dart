@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+TextStyle kTextStyle([double? size]) => TextStyle(
+      color: kAiChatTextColor,
+      fontSize: size,
+    );
 const kBaseColor = Color(0xFF1D1045);
 
 const kButtonUpperColor = Color(0xFF62BFFF);

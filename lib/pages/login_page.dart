@@ -1,6 +1,8 @@
 import 'package:chat_app/constants.dart';
 import 'package:flutter/material.dart';
 
+import '../utilities/widgets/roundedbtn.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
@@ -40,96 +42,103 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Please enter your account info',
-                  style: TextStyle(fontSize: 24.0),
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: const BorderSide(width: 2.0),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value != null && value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: const BorderSide(width: 2.0),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value != null && value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    if (value!.length < 6) {
-                      return "Length can't be less than 6";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16.0),
-                Container(
-                  width: double.infinity,
-                  height: 50.0,
-                  decoration: BoxDecoration(
-                    color: !validated ? Colors.grey : null,
-                    gradient: !validated
-                        ? null
-                        : const LinearGradient(
-                            colors: [kButtonUpperColor, kButtonLowerColor],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(width: 2.0, color: kBorderColor),
-                  ),
-                  child: MaterialButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        validated = false;
-                        _emailController.clear();
-                        _passwordController.clear();
-                        _formKey.currentState!.reset();
-                        setState(() {});
-                      }
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: const Text(
-                      'OK',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
+      backgroundColor: kBaseColor,
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(
+                    Icons.close,
+                    color: kIconColor,
+                    size: 30,
+                  )),
             ),
-          ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+            Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Please enter your account info',
+                      style: kTextStyle(30),
+                    ),
+                    const SizedBox(height: 16.0),
+                    buildTextField(
+                      _emailController,
+                      'Email',
+                      validator: (value) {
+                        if (value != null && value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        if (!RegExp(r'^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,}$')
+                            .hasMatch(value!)) {
+                          return "invalid email";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    buildTextField(
+                      _passwordController,
+                      'Password',
+                      isPassword: true,
+                      validator: (value) {
+                        if (value != null && value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        if (value!.length < 6) {
+                          return "Length can't be less than 6";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                    RoundedButton(
+                      isDisabled: !validated,
+                      colored: validated,
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          validated = true;
+                          _formKey.currentState!.reset();
+                          _emailController.clear();
+                          _passwordController.clear();
+                          setState(() {});
+                        }
+                      },
+                      text: 'OK',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  TextFormField buildTextField(controller, label,
+      {String? Function(String?)? validator, bool? isPassword = false}) {
+    return TextFormField(
+      style: kTextStyle(),
+      obscureText: false,
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: kTextStyle().copyWith(color: kHintColor),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: const BorderSide(width: 2.0, color: kBorderColor),
+        ),
+      ),
+      validator: validator,
     );
   }
 }
